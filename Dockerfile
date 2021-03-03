@@ -37,6 +37,8 @@ RUN apk update \
 #RUN pip3 install --no-cache-dir setuptools
 
 # Don't build rust bindings for cryptography (would fail for armv7)
+RUN echo '#!/bin/sh' >/usr/bin/lsb_release && chmod +x /usr/bin/lsb_release
+RUN pip3 --version
 ENV CRYPTOGRAPHY_DONT_BUILD_RUST 1
 RUN pip3 install --no-cache-dir robotframework-sshlibrary==3.5.1
 

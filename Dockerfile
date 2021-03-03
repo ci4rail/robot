@@ -34,7 +34,7 @@ RUN apk update \
     wget
     #    && apk del --no-cache --update-cache .build-deps
 
-RUN pip3 install --no-cache-dir setuptools
+#RUN pip3 install --no-cache-dir setuptools
 
 # Don't build rust bindings for cryptography (would fail for armv7)
 ENV CRYPTOGRAPHY_DONT_BUILD_RUST 1

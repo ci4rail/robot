@@ -1,35 +1,21 @@
-FROM alpine:3.13 AS get_sources
-RUN apk update && apk upgrade && \
-    apk add --no-cache git
-ARG ROBOTFRAMEWORK_VERSION
-ENV ROBOTFRAMEWORK_VERSION=${ROBOTFRAMEWORK_VERSION}
-
-
-RUN mkdir -p /source && cd /source && \
-    if [ -z "${ROBOTFRAMEWORK_VERSION}" ]; then \
-    echo Cloning master branch; \
-    git clone -b master --depth 1 https://github.com/robotframework/robotframework.git; \
-    else \
-    echo Cloning branch ${ROBOTFRAMEWORK_VERSION}; \
-    git clone -b ${ROBOTFRAMEWORK_VERSION} --depth 1 https://github.com/robotframework/robotframework.git; \
-    fi #redo
-
-FROM python:3.9.2-alpine3.13
+# Inspired by https://github.com/ppodgorsek/docker-robot-framework/blob/master/Dockerfile
+FROM siredmar/robot:v4.0b3
 LABEL description="Robot Framework in an alpine based Python 3 docker image"
-COPY --from=get_sources /source/robotframework /source/
-RUN cd /source/ && python setup.py install && cd / && rm -rf /source
-# Dependency versions
-ENV AXE_SELENIUM_LIBRARY_VERSION 2.1.6
-ENV DATABASE_LIBRARY_VERSION 1.2
-ENV DATADRIVER_VERSION 1.0.0
-ENV DATETIMETZ_VERSION 1.0.6
-ENV FAKER_VERSION 5.0.0
-ENV FTP_LIBRARY_VERSION 1.9
-ENV IMAP_LIBRARY_VERSION 0.3.8
-ENV PABOT_VERSION 1.10.0
-ENV REQUESTS_VERSION 0.8.0
-ENV SELENIUM_LIBRARY_VERSION 4.5.0
-ENV SSH_LIBRARY_VERSION 3.5.1
+
+# Set the reports directory environment variable
+ENV ROBOT_REPORTS_DIR /opt/robotframework/reports
+
+# Set the tests directory environment variable
+ENV ROBOT_TESTS_DIR /opt/robotframework/tests
+
+# Setup the timezone to use, defaults to UTC
+ENV TZ UTC
+
+# Define the default user who'll run the tests
+ENV ROBOT_UID 1000
+ENV ROBOT_GID 1000
+
+
 RUN apk update \
     && apk --no-cache upgrade \
     && apk --no-cache --virtual .build-deps add \
@@ -45,23 +31,31 @@ RUN apk update \
     musl-dev \
     openssl-dev \
     which \
-    wget \
-    && pip3 install \
-    --no-cache-dir \
-    robotframework-databaselibrary==$DATABASE_LIBRARY_VERSION \
-    robotframework-datadriver==$DATADRIVER_VERSION \
-    robotframework-datadriver[XLS] \
-    robotframework-datetime-tz==$DATETIMETZ_VERSION \
-    robotframework-faker==$FAKER_VERSION \
-    robotframework-ftplibrary==$FTP_LIBRARY_VERSION \
-    robotframework-imaplibrary2==$IMAP_LIBRARY_VERSION \
-    robotframework-pabot==$PABOT_VERSION \
-    robotframework-requests==$REQUESTS_VERSION \
-    robotframework-seleniumlibrary==$SELENIUM_LIBRARY_VERSION \
-    robotframework-sshlibrary==$SSH_LIBRARY_VERSION \
-    axe-selenium-python==$AXE_SELENIUM_LIBRARY_VERSION \
-    PyYAML \
-    # Clean up buildtime dependencies
-    && apk del --no-cache --update-cache .build-deps
+    wget 
+    #    && apk del --no-cache --update-cache .build-deps
+
+RUN pip3 install --no-cache-dir robotframework-sshlibrary==3.5.1
+RUN pip3 install --no-cache-dir robotframework-pabot==1.10.0
+RUN pip3 install --no-cache-dir tinkerforge==2.1.28
+RUN pip3 install PyYAML
+
+# Create the default report and work folders with the default user to avoid runtime issues
+# These folders are writeable by anyone, to ensure the user can be changed on the command line.
+RUN mkdir -p ${ROBOT_REPORTS_DIR} \
+  && chown ${ROBOT_UID}:${ROBOT_GID} ${ROBOT_REPORTS_DIR} 
+
+# Allow any user to write logs
+RUN chmod ugo+w /var/log \
+  && chown ${ROBOT_UID}:${ROBOT_GID} /var/log
+
+# Update system path
+ENV PATH=/opt/robotframework/bin:/opt/robotframework/drivers:$PATH
+
+# Set up a volume for the generated reports
+VOLUME ${ROBOT_REPORTS_DIR}
+
+USER ${ROBOT_UID}:${ROBOT_GID}
+
+WORKDIR ${ROBOT_TESTS_DIR}
 ENTRYPOINT [ "/usr/local/bin/robot" ]
 CMD [ "--help" ]

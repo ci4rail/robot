@@ -1,0 +1,32 @@
+name: Create Release
+
+on:
+  schedule:
+    # Run every hour sharp, ref: https://crontab.guru/#0_*_*_*_*
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  create-release:
+    name: create-release
+    runs-on: ubuntu-20.04
+    steps:
+      # ref: https://github.com/oprypin/find-latest-tag
+      - name: Find latest tag of dependency
+        id: upstream_tag
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: robotframework/robotframework
+          releases-only: true
+          prefix: 'v'
+
+      - name: Create Branch
+        uses: peterjgrainger/action-create-branch@v2.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          branch:  ${{ steps.upstream_tag.outputs.tag }}

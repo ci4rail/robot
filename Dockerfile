@@ -31,9 +31,12 @@ RUN apk update \
     musl-dev \
     openssl-dev \
     which \
-    wget 
+    wget \
+    libssl-dev \
+    python-drivers
     #    && apk del --no-cache --update-cache .build-deps
 
+RUN pip3 install --no-cache-dir setuptools
 RUN pip3 install --no-cache-dir robotframework-sshlibrary==3.5.1
 RUN pip3 install --no-cache-dir robotframework-pabot==1.10.0
 RUN pip3 install --no-cache-dir tinkerforge==2.1.28

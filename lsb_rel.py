@@ -15,4 +15,10 @@ def _lsb_release_info():
             return {}
     return stdout
 
+
+print(subprocess.check_output(["ls", "-l", "/dev/null"], stderr=subprocess.STDOUT))
+try:
+    print(subprocess.check_output(["lsb_release2"], stderr=subprocess.STDOUT))
+except OSError:
+    pass
 print(_lsb_release_info())

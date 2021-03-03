@@ -7,9 +7,9 @@ export DOCKER_CLI_EXPERIMENTAL=enabled
 export DOCKER_BUILDKIT=1
 docker run --rm --privileged multiarch/qemu-user-static:register --reset -p yes
 
-docker buildx create \
-	--name builder \
-	--driver docker-container \
-	--platform linux/arm/v7 \
-	--use
-docker buildx inspect --bootstrap
+#docker buildx create \
+#	--name builder \
+#	--driver docker-container \
+#	--platform linux/arm/v7 \
+#	--use
+#docker buildx inspect --bootstrap

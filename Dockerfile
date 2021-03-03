@@ -20,8 +20,8 @@ RUN apk update \
     && apk --no-cache upgrade \
     && apk --no-cache --virtual .build-deps add \
     # Install dependencies for cryptography due to https://github.com/pyca/cryptography/issues/5771
-    cargo \
-    rust \
+    #cargo \
+    #rust \
     # Continue with system dependencies
     gcc \
     g++ \
@@ -31,13 +31,15 @@ RUN apk update \
     musl-dev \
     openssl-dev \
     which \
-    wget \
-    libssl-dev \
-    python-drivers
+    wget
     #    && apk del --no-cache --update-cache .build-deps
 
 RUN pip3 install --no-cache-dir setuptools
+
+# Don't build rust bindings for cryptography (would fail for armv7)
+ENV CRYPTOGRAPHY_DONT_BUILD_RUST 1
 RUN pip3 install --no-cache-dir robotframework-sshlibrary==3.5.1
+
 RUN pip3 install --no-cache-dir robotframework-pabot==1.10.0
 RUN pip3 install --no-cache-dir tinkerforge==2.1.28
 RUN pip3 install PyYAML

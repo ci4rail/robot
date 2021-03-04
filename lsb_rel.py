@@ -16,6 +16,7 @@ def _lsb_release_info():
     return stdout
 
 
+
 print(subprocess.check_output(["ls", "-l", "/dev/null"], stderr=subprocess.STDOUT))
 try:
     print(subprocess.check_output(["lsb_release2"], stderr=subprocess.STDOUT))

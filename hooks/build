@@ -21,4 +21,6 @@ echo "Using BUILD_INFO=${BUILD_INFO}"
 docker buildx build \
 	--platform linux/arm/v7 \
     --progress plain \
-    .
+    --push \
+    -t ci4rail/robot-testfarm:${SOURCE_BRANCH} .
+

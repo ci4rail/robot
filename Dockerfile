@@ -36,7 +36,6 @@ ENV ROBOT_GID 1000
 
 #RUN pip3 install --no-cache-dir setuptools
 
-
 COPY lsb_rel.py /tmp
 RUN python3 /tmp/lsb_rel.py
 

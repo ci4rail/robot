@@ -31,5 +31,5 @@ jobs:
         run: |
           docker buildx build \
           --output "type=image,push=false" \
-          --platform=linux/arm/v7
+          --platform=linux/arm/v7 \
           --file ./Dockerfile .

@@ -16,33 +16,33 @@ ENV ROBOT_UID 1000
 ENV ROBOT_GID 1000
 
 
-#RUN apk update \
-#&& apk --no-cache upgrade \
-#&& apk --no-cache --virtual .build-deps add \
+RUN apk update \
+    && apk --no-cache upgrade \
+    && apk --no-cache --virtual .build-deps add \
 # Install dependencies for cryptography due to https://github.com/pyca/cryptography/issues/5771
-#cargo \
-#rust \
+    #cargo \
+    #rust \
 # Continue with system dependencies
-#gcc \
-#g++ \
-#libffi-dev \
-#linux-headers \
-#make \
-#musl-dev \
-#openssl-dev \
-#which \
-#wget
+    gcc \
+    g++ \
+    libffi-dev \
+    linux-headers \
+    make \
+    musl-dev \
+    openssl-dev \
+    which \
+    wget
 #    && apk del --no-cache --update-cache .build-deps
 
 #RUN pip3 install --no-cache-dir setuptools
 
 
-COPY lsb_rel.py /tmp
-RUN python3 /tmp/lsb_rel.py
+#COPY lsb_rel.py /tmp
+#RUN python3 /tmp/lsb_rel.py
 
-RUN echo '#!/bin/sh' >/bin/lsb_release && chmod +x /bin/lsb_release
-RUN lsb_release
-RUN out="$(pip3 --version)" && echo $out
+#RUN echo '#!/bin/sh' >/bin/lsb_release && chmod +x /bin/lsb_release
+#RUN lsb_release
+#RUN out="$(pip3 --version)" && echo $out
 
 # Don't build rust bindings for cryptography (would fail for armv7)
 ENV CRYPTOGRAPHY_DONT_BUILD_RUST 1

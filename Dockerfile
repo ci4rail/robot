@@ -1,6 +1,6 @@
 # Inspired by https://github.com/ppodgorsek/docker-robot-framework/blob/master/Dockerfile
 FROM siredmar/robot:v4.0b3
-LABEL description="Robot Framework in an alpine based Python 3 docker image"
+LABEL description="Robot Framework in docker image with some robot libraries"
 
 # Set the reports directory environment variable
 ENV ROBOT_REPORTS_DIR /opt/robotframework/reports
@@ -34,15 +34,6 @@ RUN apk update \
     wget
 #    && apk del --no-cache --update-cache .build-deps
 
-#RUN pip3 install --no-cache-dir setuptools
-
-
-#COPY lsb_rel.py /tmp
-#RUN python3 /tmp/lsb_rel.py
-
-#RUN echo '#!/bin/sh' >/bin/lsb_release && chmod +x /bin/lsb_release
-#RUN lsb_release
-#RUN out="$(pip3 --version)" && echo $out
 
 # Don't build rust bindings for cryptography (would fail for armv7)
 ENV CRYPTOGRAPHY_DONT_BUILD_RUST 1

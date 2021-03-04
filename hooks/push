@@ -1,2 +1,0 @@
-#!/bin/bash
-echo "Push already done by build step. Nothing to do."

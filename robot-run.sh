@@ -7,6 +7,13 @@
 set -o errexit   # abort on nonzero exitstatus
 set -o pipefail  # don't hide errors within pipes
 
-image=ci4rail/robot:latest
+# pass all ROBOT_* and REBOT_* environment variables to image 
+env_file=`mktemp`
+function finish {
+  rm -rf ${env_file}
+}
+trap finish EXIT
+(env | grep ^R[OE]BOT_.*= > ${env_file} ) || :
 
-docker run -v=`pwd`:/opt/robotframework/tests:Z -t ${image} "${@}"
+image=ci4rail/robot:latest
+docker run -v=`pwd`:/opt/robotframework/tests:Z --env-file ${env_file} -t ${image} "${@}"

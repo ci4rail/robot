@@ -16,4 +16,4 @@ trap finish EXIT
 (env | grep ^R[OE]BOT_.*= > ${env_file} ) || :
 
 image=ci4rail/robot:latest
-docker run -v=`pwd`:/opt/robotframework/tests:Z --env-file ${env_file} -u `id -a` -a-t ${image} "${@}"
+docker run -v=`pwd`:/opt/robotframework/tests:Z --env-file ${env_file} -u `id -u` -a-t ${image} "${@}"

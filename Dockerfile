@@ -33,7 +33,7 @@ RUN apk update \
 ENV CRYPTOGRAPHY_DONT_BUILD_RUST 1
 RUN pip3 install --no-cache-dir robotframework-sshlibrary==3.5.1
 
-RUN pip3 install --no-cache-dir robotframework-pabot==1.10.0
+RUN pip3 install --no-cache-dir robotframework-pabot==1.11.0
 RUN pip3 install --no-cache-dir tinkerforge==2.1.28
 RUN pip3 install PyYAML
 

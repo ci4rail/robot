@@ -2,6 +2,7 @@
 
 [robot](http://robotframework.org/) in an [unofficial Python 3](https://hub.docker.com/_/python?tab=description) alpine based docker container and a few additional robot libraries installed:
 - sshlibrary
+- mqttlibrary
 - pabot
 
 # Docker image build

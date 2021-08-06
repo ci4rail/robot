@@ -35,8 +35,9 @@ ENV CRYPTOGRAPHY_DONT_BUILD_RUST 1
 #RUN pip3 install --no-cache-dir robotframework-sshlibrary==3.5.1
 RUN pip3 install --no-cache-dir git+https://github.com/ci4rail/SSHLibrary.git@57f25955a73e213a55d2e0e713da54a260a843ca
 
-RUN pip3 install --no-cache-dir robotframework-pabot==1.11.0
-RUN pip3 install --no-cache-dir tinkerforge==2.1.28
+RUN pip3 install --no-cache-dir robotframework-pabot==1.11.0 \
+  robotframework-mqttlibrary==0.7.1.post3 
+RUN pip3 install --no-cache-dir tinkerforge==2.1.28 paho-mqtt==1.5.1 
 RUN pip3 install PyYAML
 
 # Create the default report and work folders with the default user to avoid runtime issues

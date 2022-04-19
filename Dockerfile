@@ -1,5 +1,4 @@
-# Inspired by https://github.com/ppodgorsek/docker-robot-framework/blob/master/Dockerfile
-FROM siredmar/robot:v4.0b3
+FROM python:3.10.4-bullseye
 LABEL description="Robot Framework in docker image with some robot libraries"
 
 # Set the reports directory environment variable
@@ -15,31 +14,37 @@ ENV TZ UTC
 ENV ROBOT_UID 1000
 ENV ROBOT_GID 1000
 
-RUN apk update \
-    && apk --no-cache upgrade \
-    && apk --no-cache --virtual .build-deps add \
-    # Continue with system dependencies
-    gcc \
-    g++ \
-    libffi-dev \
-    linux-headers \
-    make \
-    musl-dev \
-    openssl-dev \
-    which \
-    wget \
-    git
+# RUN apk update \
+#     && apk --no-cache upgrade \
+#     && apk --no-cache --virtual .build-deps add \
+#     # Continue with system dependencies
+#     gcc \
+#     g++ \
+#     libffi-dev \
+#     linux-headers \
+#     make \
+#     musl-dev \
+#     openssl-dev \
+#     which \
+#     wget \
+#     git
+RUN apt-get update && apt install git
 
-RUN pip3 install -U pip
 
 # Don't build rust bindings for cryptography (would fail for armv7)
+# This flag is only recognized up to cryptography==3.4.8!
 ENV CRYPTOGRAPHY_DONT_BUILD_RUST 1
-#RUN pip3 install --no-cache-dir robotframework-sshlibrary==3.5.1
-RUN pip3 install --no-cache-dir cryptography==3.4.8  git+https://github.com/ci4rail/SSHLibrary.git@57f25955a73e213a55d2e0e713da54a260a843ca
-
-RUN pip3 install --no-cache-dir robotframework-pabot==1.11.0 \
-    robotframework-mqttlibrary==0.7.1.post3 
-RUN pip3 install --no-cache-dir pip tinkerforge==2.1.28 paho-mqtt==1.5.1 pyyaml==6.0 scipy==1.8.0 pandas==1.4.2
+RUN pip3 install --no-cache-dir \
+    robotframework==4.1.3 \
+    cryptography==3.4.8  \
+    git+https://github.com/ci4rail/SSHLibrary.git@57f25955a73e213a55d2e0e713da54a260a843ca \
+    robotframework-pabot==1.11.0 \
+    robotframework-mqttlibrary==0.7.1.post3 \
+    tinkerforge==2.1.28 \
+    paho-mqtt==1.5.1 \
+    pyyaml==6.0 \
+    scipy==1.8.0 \
+    pandas==1.4.2
 
 # Create the default report and work folders with the default user to avoid runtime issues
 # These folders are writeable by anyone, to ensure the user can be changed on the command line.

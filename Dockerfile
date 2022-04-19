@@ -14,30 +14,13 @@ ENV TZ UTC
 ENV ROBOT_UID 1000
 ENV ROBOT_GID 1000
 
-# RUN apk update \
-#     && apk --no-cache upgrade \
-#     && apk --no-cache --virtual .build-deps add \
-#     # Continue with system dependencies
-#     gcc \
-#     g++ \
-#     libffi-dev \
-#     linux-headers \
-#     make \
-#     musl-dev \
-#     openssl-dev \
-#     which \
-#     wget \
-#     git
-#RUN apt-get update && apt install git
-
-
 # Don't build rust bindings for cryptography (would fail for armv7)
 # This flag is only recognized up to cryptography==3.4.8!
-#    cryptography==3.4.8  \
+ENV CRYPTOGRAPHY_DONT_BUILD_RUST 1
 
-#ENV CRYPTOGRAPHY_DONT_BUILD_RUST 1
 RUN pip3 install --no-cache-dir \
     robotframework==4.1.3 \
+    cryptography==3.4.8  \
     git+https://github.com/ci4rail/SSHLibrary.git@57f25955a73e213a55d2e0e713da54a260a843ca \
     robotframework-pabot==1.11.0 \
     robotframework-mqttlibrary==0.7.1.post3 \
@@ -45,9 +28,8 @@ RUN pip3 install --no-cache-dir \
     paho-mqtt==1.5.1 \
     pyyaml==6.0 
 
-RUN TARGETPLATFORM 
-
-RUN if [ ${TARGETPLATFORM} = "linux/arm/v7" ] ; then \
+# Install pre-compiled wheel for armv7, for other platforms install via pypi
+RUN if [ "${TARGETPLATFORM}" = "linux/arm/v7" ] ; then \
     cd /tmp \
     wget https://www.piwheels.org/simple/scipy/scipy-1.8.0-cp39-cp39-linux_armv7l.whl \
     pip install scipy-1.8.0-cp39-cp39-linux_armv7l.whl \

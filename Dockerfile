@@ -30,7 +30,7 @@ RUN apk update \
     wget \
     git
 
-RUN pip install -U pip
+RUN pip3 install -U pip
 
 # Don't build rust bindings for cryptography (would fail for armv7)
 ENV CRYPTOGRAPHY_DONT_BUILD_RUST 1
@@ -39,7 +39,7 @@ RUN pip3 install --no-cache-dir cryptography==3.4.8  git+https://github.com/ci4r
 
 RUN pip3 install --no-cache-dir robotframework-pabot==1.11.0 \
     robotframework-mqttlibrary==0.7.1.post3 
-RUN pip3 install --no-cache-dir tinkerforge==2.1.28 paho-mqtt==1.5.1 pyyaml==6.0 scipy==1.8.0 pandas==1.4.2
+RUN pip3 install --no-cache-dir pip tinkerforge==2.1.28 paho-mqtt==1.5.1 pyyaml==6.0 scipy==1.8.0 pandas==1.4.2
 
 # Create the default report and work folders with the default user to avoid runtime issues
 # These folders are writeable by anyone, to ensure the user can be changed on the command line.

@@ -30,10 +30,12 @@ RUN apk update \
     wget \
     git
 
+RUN pip install -U pip
+
 # Don't build rust bindings for cryptography (would fail for armv7)
 ENV CRYPTOGRAPHY_DONT_BUILD_RUST 1
 #RUN pip3 install --no-cache-dir robotframework-sshlibrary==3.5.1
-RUN pip3 install --no-cache-dir git+https://github.com/ci4rail/SSHLibrary.git@57f25955a73e213a55d2e0e713da54a260a843ca
+RUN pip3 install --no-cache-dir cryptography==3.4.8  git+https://github.com/ci4rail/SSHLibrary.git@57f25955a73e213a55d2e0e713da54a260a843ca
 
 RUN pip3 install --no-cache-dir robotframework-pabot==1.11.0 \
     robotframework-mqttlibrary==0.7.1.post3 

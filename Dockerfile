@@ -28,23 +28,34 @@ ENV ROBOT_GID 1000
 #     which \
 #     wget \
 #     git
-RUN apt-get update && apt install git
+#RUN apt-get update && apt install git
 
 
 # Don't build rust bindings for cryptography (would fail for armv7)
 # This flag is only recognized up to cryptography==3.4.8!
-ENV CRYPTOGRAPHY_DONT_BUILD_RUST 1
+#    cryptography==3.4.8  \
+
+#ENV CRYPTOGRAPHY_DONT_BUILD_RUST 1
 RUN pip3 install --no-cache-dir \
     robotframework==4.1.3 \
-    cryptography==3.4.8  \
     git+https://github.com/ci4rail/SSHLibrary.git@57f25955a73e213a55d2e0e713da54a260a843ca \
     robotframework-pabot==1.11.0 \
     robotframework-mqttlibrary==0.7.1.post3 \
     tinkerforge==2.1.28 \
     paho-mqtt==1.5.1 \
-    pyyaml==6.0 \
-    scipy==1.8.0 \
-    pandas==1.4.2
+    pyyaml==6.0 
+
+RUN TARGETPLATFORM 
+
+RUN if [ ${TARGETPLATFORM} = "linux/arm/v7" ] ; then \
+    cd /tmp \
+    wget https://www.piwheels.org/simple/scipy/scipy-1.8.0-cp39-cp39-linux_armv7l.whl \
+    pip install scipy-1.8.0-cp39-cp39-linux_armv7l.whl \
+    else \
+    pip3 install --no-cache-dir scipy==1.8.0 ; \
+    fi
+
+RUN pip3 install --no-cache-dir  pandas==1.4.2
 
 # Create the default report and work folders with the default user to avoid runtime issues
 # These folders are writeable by anyone, to ensure the user can be changed on the command line.

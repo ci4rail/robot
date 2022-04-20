@@ -20,9 +20,7 @@ RUN apt-get update && apt-get install -y libatlas-base-dev
 # piwheels.org hosts precompiled packages for armv7, currently only compatible with Python 3.9
 RUN echo "[global]\nextra-index-url=https://www.piwheels.org/simple" > /etc/pip.conf
 
-RUN cd /tmp && \
-    cat /etc/pip.conf && \
-    pip3 install --no-cache-dir \
+RUN pip3 install --no-cache-dir \
     robotframework==4.1.3 \
     robotframework-pabot==1.11.0 \
     git+https://github.com/ci4rail/SSHLibrary.git@57f25955a73e213a55d2e0e713da54a260a843ca \

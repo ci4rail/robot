@@ -1,9 +1,14 @@
 # robot
 
-[robot](http://robotframework.org/) in an [unofficial Python 3](https://hub.docker.com/_/python?tab=description) alpine based docker container and a few additional robot libraries installed:
+[robot](http://robotframework.org/) in an official Python 3 debian based docker container and a few additional robot libraries installed:
 - sshlibrary
 - mqttlibrary
 - pabot
+- pyyaml
+- tinkerforge
+- numpy
+- scipy
+- pandas
 
 # Docker image build
 ## Automated build

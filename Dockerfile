@@ -1,4 +1,4 @@
-FROM python:3.10.4-bullseye
+FROM python:3.9.12-bullseye
 LABEL description="Robot Framework in docker image with some robot libraries"
 
 # Set the reports directory environment variable
@@ -14,30 +14,25 @@ ENV TZ UTC
 ENV ROBOT_UID 1000
 ENV ROBOT_GID 1000
 
-# Don't build rust bindings for cryptography (would fail for armv7)
-# This flag is only recognized up to cryptography==3.4.8!
-ENV CRYPTOGRAPHY_DONT_BUILD_RUST 1
+# libatlas contains libclas which is required by numpy/scipy
+RUN apt-get update && apt-get install -y libatlas-base-dev
 
-RUN pip3 install --no-cache-dir \
+# piwheels.org hosts precompiled packages for armv7, currently only compatible with Python 3.9
+RUN echo "[global]\nextra-index-url=https://www.piwheels.org/simple" > /etc/pip.conf
+
+RUN cd /tmp && \
+    cat /etc/pip.conf && \
+    pip3 install --no-cache-dir \
     robotframework==4.1.3 \
-    cryptography==3.4.8  \
-    git+https://github.com/ci4rail/SSHLibrary.git@57f25955a73e213a55d2e0e713da54a260a843ca \
     robotframework-pabot==1.11.0 \
+    git+https://github.com/ci4rail/SSHLibrary.git@57f25955a73e213a55d2e0e713da54a260a843ca \
     robotframework-mqttlibrary==0.7.1.post3 \
     tinkerforge==2.1.28 \
     paho-mqtt==1.5.1 \
-    pyyaml==6.0 
+    pyyaml==6.0 \
+    scipy==1.8.0 \
+    pandas==1.4.2 
 
-# Install pre-compiled wheel for armv7, for other platforms install via pypi
-RUN if [ "${TARGETPLATFORM}" = "linux/arm/v7" ] ; then \
-    cd /tmp \
-    wget https://www.piwheels.org/simple/scipy/scipy-1.8.0-cp39-cp39-linux_armv7l.whl \
-    pip install scipy-1.8.0-cp39-cp39-linux_armv7l.whl \
-    else \
-    pip3 install --no-cache-dir scipy==1.8.0 ; \
-    fi
-
-RUN pip3 install --no-cache-dir  pandas==1.4.2
 
 # Create the default report and work folders with the default user to avoid runtime issues
 # These folders are writeable by anyone, to ensure the user can be changed on the command line.

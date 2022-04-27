@@ -14,7 +14,7 @@
 # Docker image build
 ## Automated build
 
-The image is automatically build by docker hub: [Repository on docker hub](https://hub.docker.com/repository/docker/ci4rail/robot)
+The image is automatically build by a github workflow on push to main.
 
 The container is build for 
 - linux/amd64

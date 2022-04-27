@@ -29,7 +29,8 @@ RUN pip3 install --no-cache-dir \
     paho-mqtt==1.5.1 \
     pyyaml==6.0 \
     scipy==1.8.0 \
-    pandas==1.4.2 
+    pandas==1.4.2 \
+    matplotlib==3.5.1
 
 
 # Create the default report and work folders with the default user to avoid runtime issues

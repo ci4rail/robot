@@ -9,6 +9,7 @@
 - numpy
 - scipy
 - pandas
+- matplotlib
 
 # Docker image build
 ## Automated build

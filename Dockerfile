@@ -14,6 +14,8 @@ ENV TZ UTC
 ENV ROBOT_UID 1000
 ENV ROBOT_GID 1000
 
+ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
+
 # libatlas contains libclas which is required by numpy/scipy
 RUN apt-get update && apt-get install -y libatlas-base-dev
 
@@ -21,10 +23,12 @@ RUN apt-get update && apt-get install -y libatlas-base-dev
 RUN echo "[global]\nextra-index-url=https://www.piwheels.org/simple" > /etc/pip.conf
 
 RUN pip3 install --no-cache-dir \
-    robotframework==4.1.3 \
-    robotframework-pabot==1.11.0 \
+    cryptography==3.4 \
+    robotframework==6.0.1 \
+    robotframework-pabot==2.16.0 \
     git+https://github.com/ci4rail/SSHLibrary.git@57f25955a73e213a55d2e0e713da54a260a843ca \
     robotframework-mqttlibrary==0.7.1.post3 \
+    robotframework-async-keyword==1.1.7 \
     tinkerforge==2.1.28 \
     paho-mqtt==1.5.1 \
     pyyaml==6.0 \

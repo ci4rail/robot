@@ -18,6 +18,8 @@ ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
 
 # libatlas contains libclas which is required by numpy/scipy
 RUN apt-get update && apt-get install -y libatlas-base-dev
+# Install required dependencies for doctestlibrary
+RUN apt-get install -y imagemagick tesseract-ocr ghostscript libdmtx0b libzbar0 libavcodec58 libavformat58 libswscale5
 
 # piwheels.org hosts precompiled packages for armv7, currently only compatible with Python 3.9
 RUN echo "[global]\nextra-index-url=https://www.piwheels.org/simple" > /etc/pip.conf
@@ -35,7 +37,15 @@ RUN pip3 install --no-cache-dir \
     scipy==1.8.0 \
     pandas==1.4.2 \
     matplotlib==3.5.1 \
-    pyserial==3.5
+    pyserial==3.5 \
+    robotframework-requests==0.9.6 
+
+# install doctestlibrary 0.19.0 and dependencies, as 0.20.0 requires pymupdf == 1.23.9 which is not available for armv7
+RUN pip3 install --no-cache-dir \
+    regex==2023.10.3 \
+    opencv-python-headless==4.6.0.66 \
+    scikit-image==0.19.3 \
+    robotframework-doctestlibrary==0.19.0 
 
 
 # Create the default report and work folders with the default user to avoid runtime issues

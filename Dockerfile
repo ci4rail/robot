@@ -19,7 +19,7 @@ ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
 # libatlas contains libclas which is required by numpy/scipy
 RUN apt-get update && apt-get install -y libatlas-base-dev
 # Install required dependencies for doctestlibrary
-RUN apt-get install imagemagick tesseract-ocr ghostscript libdmtx0b libzbar0 libavcodec58 libavformat58 libswscale5
+RUN apt-get install -y imagemagick tesseract-ocr ghostscript libdmtx0b libzbar0 libavcodec58 libavformat58 libswscale5
 
 # piwheels.org hosts precompiled packages for armv7, currently only compatible with Python 3.9
 RUN echo "[global]\nextra-index-url=https://www.piwheels.org/simple" > /etc/pip.conf

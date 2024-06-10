@@ -28,7 +28,7 @@ RUN pip3 install --no-cache-dir \
     cryptography==3.4 \
     robotframework==6.0.1 \
     robotframework-pabot==2.16.0 \
-    git+https://github.com/ci4rail/SSHLibrary.git@57f25955a73e213a55d2e0e713da54a260a843ca \
+    git+https://github.com/ci4rail/SSHLibrary.git@bbb219acf5805699bba6876c7b711c34053356f3 \
     robotframework-mqttlibrary==0.7.1.post3 \
     robotframework-async-keyword==1.1.7 \
     tinkerforge==2.1.28 \

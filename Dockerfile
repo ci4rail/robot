@@ -19,10 +19,8 @@ ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
 # libatlas contains libclas which is required by numpy/scipy
 RUN apt-get update && apt-get install -y libatlas-base-dev  \
     imagemagick tesseract-ocr ghostscript libdmtx0b libzbar0 libavcodec58 libavformat58 libswscale5 \
-    build-essential gfortran libopenblas-dev liblapack-dev 
-
-# install those packages NOT from piwheels.org as their sha256sums do not match the expected ones
-RUN pip3 install --no-cache-dir --no-binary=scipy 
+    build-essential gfortran libopenblas-dev liblapack-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # piwheels.org hosts precompiled packages for armv7, currently only compatible with Python 3.9
 RUN echo "[global]\nextra-index-url=https://www.piwheels.org/simple" > /etc/pip.conf

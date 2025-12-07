@@ -2,24 +2,25 @@ FROM python:3.9.12-bullseye
 LABEL description="Robot Framework in docker image with some robot libraries"
 
 # Set the reports directory environment variable
-ENV ROBOT_REPORTS_DIR /opt/robotframework/reports
+ENV ROBOT_REPORTS_DIR=/opt/robotframework/reports
 
 # Set the tests directory environment variable
-ENV ROBOT_TESTS_DIR /opt/robotframework/tests
+ENV ROBOT_TESTS_DIR=/opt/robotframework/tests
 
 # Setup the timezone to use, defaults to UTC
-ENV TZ UTC
+ENV TZ=UTC
 
 # Define the default user who'll run the tests
-ENV ROBOT_UID 1000
-ENV ROBOT_GID 1000
+ENV ROBOT_UID=1000
+ENV ROBOT_GID=1000
 
 ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
 
 # libatlas contains libclas which is required by numpy/scipy
-RUN apt-get update && apt-get install -y libatlas-base-dev
-# Install required dependencies for doctestlibrary
-RUN apt-get install -y imagemagick tesseract-ocr ghostscript libdmtx0b libzbar0 libavcodec58 libavformat58 libswscale5
+RUN apt-get update && apt-get install -y libatlas-base-dev  \
+    imagemagick tesseract-ocr ghostscript libdmtx0b libzbar0 libavcodec58 libavformat58 libswscale5 \
+    build-essential gfortran libopenblas-dev liblapack-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # piwheels.org hosts precompiled packages for armv7, currently only compatible with Python 3.9
 RUN echo "[global]\nextra-index-url=https://www.piwheels.org/simple" > /etc/pip.conf
@@ -34,11 +35,12 @@ RUN pip3 install --no-cache-dir \
     tinkerforge==2.1.28 \
     paho-mqtt==1.5.1 \
     pyyaml==6.0 \
-    scipy==1.8.0 \
-    pandas==1.4.2 \
-    matplotlib==3.5.1 \
     pyserial==3.5 \
-    robotframework-requests==0.9.6 
+    robotframework-requests==0.9.6 \
+    PyVISA-py==0.7.2 \
+    easy-scpi==0.1.7 \
+    zeroconf==0.148.0 \
+    scipy==1.13.1 pandas==1.4.2 matplotlib==3.5.1
 
 # install doctestlibrary 0.19.0 and dependencies, as 0.20.0 requires pymupdf == 1.23.9 which is not available for armv7
 RUN pip3 install --no-cache-dir \
